@@ -1,32 +1,37 @@
-# Prerequisites
-*.d
+/*
+*CAPITULO IV: perifericos especiales
+*DEBER 4.1: CAD Y PWM
+*NOMBRE: Marlon Ipiales 
+*NOTA: Para que el codigo compile debe estar seleccionado con Arduino Uno WiFi caso contrario si no funcionara seleccionar Arduino Uno 
+*/
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(13,12,5,4,3,2);       //Seleccion de pines para LCD 
+int conversor;                          //Variable para adquirir datos del conversor entre 0 - 1023 
+float voltaje;                          //Variable para conversion desde el conversor a voltaje 
+int dutty;               
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+void setup() {
+  lcd.begin(16,2);                     //Inicialoza la LCD
+}
 
-# Precompiled Headers
-*.gch
-*.pch
+void loop() {
+  conversor=analogRead(14);            //Lectura del canal A0 - 0 - 14
+  voltaje=(conversor*5.0)/1023.0;      //Conversor de voltaje
+  dutty=conversor/4;                   //Cambio la escala para el dutty ciclo 
+  analogWrite(11,dutty);               //Envio del valor al pin 11
+  lcd.setCursor(0,0);
+  lcd.print("CAD:");
+  lcd.setCursor(5,0);
+  lcd.print(conversor);
+  lcd.setCursor(0,1);
+  lcd.print("V:");
+  lcd.setCursor(3,1);
+  lcd.print(voltaje);
+  lcd.setCursor(9,1);
+  lcd.print("PWM:");
+  lcd.setCursor(3,1);
+  lcd.print((dutty*100)/255);
+  delay(300);
+  lcd.clear();
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+}
